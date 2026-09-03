@@ -1,0 +1,14 @@
+algorithms:
+  - he
+  - clahe
+  - gamma
+
+models:
+  - zerodce
+  - sci
+
+metrics:
+  - PSNR
+  - SSIM
+  - MSE
+  - MAE
