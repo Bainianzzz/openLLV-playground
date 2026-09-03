@@ -1,6 +1,6 @@
 CUDA_INDEX = https://download.pytorch.org/whl/cu126
 
-.PHONY: sync cpu cuda dev
+.PHONY: sync cpu cuda start dev
 
 # 自动检测：有 NVIDIA 驱动就装 cu126，否则默认 PyPI
 sync:
@@ -19,4 +19,7 @@ cuda:
 	UV_INDEX="pytorch=$(CUDA_INDEX)" uv sync
 
 dev:
-	uv sync --group dev
+	uv run gradio main.py --watch-dirs app
+
+start:
+	uv run python main.py
