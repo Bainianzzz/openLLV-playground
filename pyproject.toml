@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "gradio>=6.26.0",
     "openllv",
+    "pyyaml>=6.0.3",
 ]
 
 [tool.uv.sources]
