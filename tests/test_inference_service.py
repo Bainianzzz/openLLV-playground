@@ -1,9 +1,9 @@
-"""app.inference.service 中自写逻辑的单元测试。"""
+"""app.inference.validate 中自写逻辑的单元测试。"""
 
 import gradio as gr
 import pytest
 
-from app.inference.service import _parse_params, _source
+from app.inference.validate import _parse_params, _source
 
 
 class TestParseParams:

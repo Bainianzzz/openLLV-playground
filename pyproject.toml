@@ -30,6 +30,11 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.16.5",
 ]
+test = [
+    "pytest>=9.1.1",
+    "gradio>=6.26.0",
+    "pyyaml>=6.0.3",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
