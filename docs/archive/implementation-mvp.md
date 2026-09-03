@@ -14,11 +14,11 @@
 
 3. **实现三大功能**：`main.py` 只组装 `gr.Blocks` + 三个 `gr.Tab`；每个功能一个模块，业务方法 `run_*` 透传 openLLV API（`predict`/`train`/`evaluate`），界面 `build()` 渲染组件并绑定事件。
 
-4. **结构重构**：每个功能由单文件改为包，界面组装 `build()` 与业务方法 `run_*` 分离，避免混在一起。
+4. **结构重构**：每个功能由单文件改为包，界面组装 `build()` 与业务方法 `run_*` 分离；与 openLLV 无关的纯逻辑（参数解析、输入互斥）抽到 `validate.py`。
 
 5. **配置下沉**：页面可选项与输出目录放 `cfg/*.yaml`，由 `app/__init__.py` 加载导出常量，页面不再硬编码。
 
-6. **工程化**：补充 pytest 用例、pre-commit（ruff + pytest）、ruff D103 强制函数 docstring。
+6. **工程化**：补充 pytest 用例、pre-commit（ruff + pytest）、ruff D103 强制函数 docstring；CI 用 `test` 依赖组最小安装（跳过 openllv/torch 等大依赖）；main 分支加 ruleset（仅 PR 合并、CI 通过、禁 force push/删除、不可绕过）。
 
 ## 3. 最终文件结构
 
@@ -29,7 +29,8 @@ openllv-playground/
 │   ├── __init__.py              # 从 cfg/*.yaml 加载配置导出常量
 │   ├── inference/
 │   │   ├── __init__.py          # build() 界面组装
-│   │   └── service.py           # run_* 业务方法
+│   │   ├── service.py           # run_* 业务方法
+│   │   └── validate.py          # _parse_params / _source 纯逻辑（不依赖 openLLV）
 │   ├── train/
 │   │   ├── __init__.py
 │   │   └── service.py
@@ -41,6 +42,7 @@ openllv-playground/
 │   └── inference.yaml           # result_dir / checkpoint_dir
 ├── tests/
 │   └── test_inference_service.py
+├── .github/workflows/test.yml   # PR 时跑测试（最小依赖）
 ├── docs/archive/                # 本文档
 ├── Makefile                     # sync / cpu / cuda / dev / start
 ├── .pre-commit-config.yaml      # ruff + pytest
@@ -80,9 +82,11 @@ openllv-playground/
 
 ## 6. 工程化
 
-- **测试**：`tests/test_inference_service.py` 覆盖 `_parse_params`、`_source` 两个自写逻辑；透传 openLLV 的方法不测。
+- **测试**：覆盖 `_parse_params`、`_source` 两个自写逻辑；透传 openLLV 的方法不测。
 - **pre-commit**：提交时自动跑 `ruff check` + `pytest`，任一失败阻止提交。
 - **lint**：ruff 启用 `D103`（公共函数缺 docstring），强制函数注释。
+- **CI**：GitHub Actions 在 PR 时跑测试；`test` 依赖组仅含 pytest/gradio/pyyaml，用 `uv sync --only-group test --no-install-project` 跳过 openllv/torch 等大依赖。
+- **分支保护**：main 分支 ruleset，仅 PR 合并、要求 `test` 通过、禁 force push / 删除、admin 不可绕过。
 
 ## 7. 运行
 
