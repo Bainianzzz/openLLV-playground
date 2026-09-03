@@ -1,21 +1,7 @@
 import gradio as gr
-import openLLV as llv
 
 from app import MODELS
-
-
-def run_train(model, root_dir, epochs, batch_size, device, save_dir):
-    kwargs = {}
-    if save_dir and save_dir.strip():
-        kwargs["output_dir"] = save_dir.strip()
-    return llv.train(
-        model,
-        root_dir=root_dir,
-        epochs=int(epochs),
-        batch_size=int(batch_size),
-        device=device,
-        **kwargs,
-    )
+from app.train.service import run_train
 
 
 def build():

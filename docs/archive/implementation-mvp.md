@@ -31,7 +31,7 @@ openllv-playground/
 单页内含两个子 Tab（`gr.Tabs`）：传统增强、深度增强，共用同一份输入/输出。
 
 - **输入**：`gr.Image`（单张）+ `gr.Textbox` 输入文件夹，两者互斥（`_source` 校验，同给则 `gr.Error`）。
-- **输出**：只显示一张 `gr.Image`；文件夹输入时返回 `None`（图不显示，文件落到输出目录）。
+- **输出**：结果图 `gr.Image` + 状态栏 `gr.Textbox`；文件夹输入时结果图为 `None`（图不显示，文件落到输出目录），增强完成后状态栏显示 `finish`。
 - **传统增强**：算法下拉（`ALGORITHMS`）+ 保存目录 + 算法参数（JSON 文本框），参数经 `json.loads` 解析后透传 `llv.predict`。
 - **深度增强**：checkpoint 路径 + `device`（cpu/cuda）+ 可选 `resize`，透传 `llv.predict`。
 - 单图输出文件默认 `output.png`；`input_dir` 为目录时按 `llv.predict` 行为递归输出到 `save_dir`。
