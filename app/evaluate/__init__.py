@@ -5,6 +5,7 @@ from app.evaluate.service import run_evaluate
 
 
 def build():
+    """渲染评估页：增强图目录、参考图目录、指标、结果保存文件。"""
     en_dir = gr.Textbox(label="增强图目录")
     ref_dir = gr.Textbox(label="参考图目录（可选，全参考指标需要）")
     metrics = gr.CheckboxGroup(METRICS, value=METRICS[:2], label="指标")

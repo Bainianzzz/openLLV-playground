@@ -10,6 +10,7 @@ DEFAULT_RESULT_DIR = Path(RESULT_DIR)
 
 
 def _parse_params(raw):
+    """解析算法参数字符串为字典；空输入返回空字典，非 JSON 或非对象抛 gr.Error。"""
     if not raw or not raw.strip():
         return {}
     try:
@@ -22,6 +23,7 @@ def _parse_params(raw):
 
 
 def _source(image, input_dir):
+    """解析推理输入来源：单张图像或文件夹，二者互斥。"""
     if image is not None and (input_dir and input_dir.strip()):
         raise gr.Error("单张图像与文件夹输入不能同时使用，二选一")
     if image is not None:
@@ -32,6 +34,10 @@ def _source(image, input_dir):
 
 
 def _run(method, image, input_dir, save_dir, kwargs):
+    """执行预测并返回 (结果图, 状态)。
+
+    文件夹输入走批量推理（不返回单图）；单图返回增强后的 numpy 数组。
+    """
     source = _source(image, input_dir)
     out_dir = Path(save_dir.strip()) if save_dir and save_dir.strip() else DEFAULT_RESULT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -46,10 +52,12 @@ def _run(method, image, input_dir, save_dir, kwargs):
 
 
 def run_tradition_inference(image, input_dir, algo, save_dir, params):
+    """执行传统算法推理，返回增强结果与状态。"""
     return _run(algo, image, input_dir, save_dir, _parse_params(params))
 
 
 def run_deep_inference(image, input_dir, checkpoint, device, resize, save_dir):
+    """执行深度模型推理（需 checkpoint），返回增强结果与状态。"""
     kwargs = {"device": device}
     if resize:
         kwargs["resize"] = int(resize)

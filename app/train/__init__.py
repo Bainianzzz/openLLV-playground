@@ -5,6 +5,7 @@ from app.train.service import run_train
 
 
 def build():
+    """渲染训练页：左侧配置项、右侧超参，按钮触发训练。"""
     with gr.Row(equal_height=True):
         with gr.Column():
             model = gr.Dropdown(MODELS, value=MODELS[0], label="模型")

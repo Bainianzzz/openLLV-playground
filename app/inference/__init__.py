@@ -5,6 +5,8 @@ from app.inference.service import run_deep_inference, run_tradition_inference
 
 
 def build():
+    """渲染推理页：传统增强 / 深度增强两个子 Tab，共用输入输出。"""
+    # 输入区（单图 / 文件夹二选一）与输出区（结果图 + 状态）
     with gr.Row(equal_height=True):
         with gr.Column():
             input_img = gr.Image(type="numpy", label="输入图像", height=300)
@@ -13,6 +15,7 @@ def build():
             output_img = gr.Image(label="结果", height=300)
             status = gr.Textbox(label="状态")
 
+    # 两种增强方式各自的选项
     with gr.Tabs():
         with gr.Tab("传统增强"):
             with gr.Row():
